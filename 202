@@ -1,0 +1,54 @@
+#include<iostream>
+#include<stdio.h>
+#include<string.h>
+#include<math.h>
+
+int p[3000];
+int main()
+{
+	int a,b;
+	while(scanf("%d %d",&a,&b)==2&&b)
+	{
+		int t=a%b,k=0,c,x;
+		x=floor((double)a/b);
+		printf("%d/%d=%d.",a,b,x);
+		memset(p,0,sizeof(p));
+		for(int i=0; i<3000; i++)      //计算小数点后3000位小数
+		{
+			t*=10;
+			p[i]=t/b;
+			t%=b;
+		}
+		while(1)              //循环是从第k位开始
+		{
+			bool flag;
+			for (c=1; c<=b; c++)    //周期c是大于0且小于等于b的人一个数
+			{
+				flag=true;
+				for (int j= 0; j<3000-k; j++)
+					if(p[j+k]!=p[j%c+k])      //j%c+k为第一个周期
+					{
+						flag=false;
+						break;
+					}
+				if(flag)break;
+			}
+			if(flag)
+			{
+				for(int j=0; j<k; j++)printf("%d",p[j]);
+				printf("(");
+				if (c<= 50)for(int j=k; j<c+k; j++)printf("%d",p[j]);
+				else
+				{
+					for(int j=k; j<k+50; j++)printf("%d",p[j]);
+					printf("...");
+				}
+				printf(")\n");
+				printf("   %d = number of digits in repeating cycle\n\n",c);
+				break;
+			}
+			k++;
+		}
+	}
+	return 0;
+}
